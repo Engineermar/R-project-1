@@ -1,0 +1,24 @@
+MERSQI item,Domain,Studies no. ,Item possible score,Percentage (%)
+Single group crosssectional or single group posttest only,Study design,3,1,10
+Single group pretest and posttest,Study design,0,1.5,0
+"Nonrandomized, 2 (or more) groups",Study design,12,2,40
+Randomized controlled trial,Study design,15,3,50
+<50 or not reported,Sampling,7,0.5,23.3
+50–74,Sampling,7,1,23.3
+≥75,Sampling,16,1.5,53.3
+"Assessment by study participant (e.g., selfreported data)",Type of data,12,1,40
+"Objective measurement (e.g., OSCE, written exam)",Type of data,18,3,60
+Not reported,Validity of evaluation instrument,30,0,100
+Reported,Validity of evaluation instrument,0,1,0
+Not reported,Content,26,0,86.6
+Reported,Content,4,1,13.3
+Not reported, Relationships to other variable ,15,0,50
+Reported, Relationships to other variable ,15,1,50
+Data analysis inappropriate for study design or type of data,Data analysis,10,0,33.3
+Data analysis appropriate for study design and type of data,Data analysis,20,1,66.6
+Descriptive analysis only (means and variances),Complexity of analysis,22,1,73.3
+Beyond descriptive analysis (any comparisons),Complexity of analysis,8,2,26.6
+"Satisfaction, attitude, perceptions, opinion, general facts.",Outcome,7,1,23.3
+"Knowledge, skills (e.g., OSCEs, SPs as outcome measure)",Outcome,22,1.5,73.3
+"Behaviours (e.g., physician actual practice)",Outcome,1,2,3.33
+Patient/health care outcomes,Outcome,0,3,0

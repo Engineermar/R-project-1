@@ -1,0 +1,263 @@
+---
+title: The Effectiveness of 3D Technology in Medical education and Training : A Data scientist approach
+author:
+  - name: Lamar Lyons
+    email: llyons8@gatech.edu
+    affiliation: Georgia Institute of Technology
+    
+abstract: |
+   The areas of this study are to distinguish and investigate three dimensional (3D) organ models as well as its effect on Medical education. An analysis and visualization of several studies conducted related to the topic are outlined.
+
+
+AUTHOR KEYWORDS
+  "3D anatomy"; "three dimensional anatomical"; "3D virtualization" ;"3D VR" ;"3D anatomical model”; "3D medical education"
+
+bibliography: bibliography.bib
+
+---
+
+ 
+
+
+
+```{r, warning = FALSE, message = FALSE, echo=FALSE}
+install.packages("xtable");library(xtable)
+install.packages("ggplot2");library(ggplot2)
+install.packages("ggfortify");library(ggfortify)
+install.packages("gridExtra");library(gridExtra)
+install.packages("xlsx");library(xlsx)
+install.packages("ggthemes");library(ggthemes);
+install.packages("reshape2");library(reshape2);
+install.packages("gmodels");library(gmodels);
+
+
+X3D_Med <- read_csv("~/3D Medical Schools  in Research As of 2016 - Sheet1.csv")
+Class_Survey <- read_csv("~/Clean Class Survey - Sheet1.csv")
+Impact3D<- read_csv("~/Impact of using anatomy 3D educational tools on students  - Sheet1.csv")
+MERSQI <- read_csv("~/Medical Education Research Study Quality Instrument (MERSQI) - Sheet1.csv")
+```
+
+
+# Introduction 
+
+Anatomy is a discipline by which spatial visualization is of value. Therefore, the potential to envision and mentally manipulate  3D anatomical structures and sufficiently identify related components is an essential ability for medical students. Research in this particular field might not just assess visual-spatial abilities of a student  but also demonstrate the improvements in educational technology in medical training. Going forward, some data analysis techniques will be implemented  to provide a better picture of the status quo of 3D Medical education. This paper outlines the effectiveness of the 3D technology used for pedagogical purposes. 
+
+
+# Data
+
+  MERSQI
+      The Medical Education Research Study Quality Instrument (MERSQI) and the Newcastle-Ottawa Scale-Education (NOS-E) were created to appraise methodological quality in healthcare training research. The research aim was evaluating the interrater dependability, normative scores, along with between instrument correlation for these 2 instruments.The utilization of the MERSQI in this particular study uses the analysis by Reed et al[3]. plus was performed in the following stages: First, 3 evaluators (the writer and 2 research assistants) analyzed using the instrument and practiced the use of its independently to assess the research of those included. Third, the thirty studies had been rated  independently by the 3 evaluators with the MERSQI scoring hand. 
+
+Data Summary
+```{r}
+summary(MERSQI)
+
+CountPerc<-function(category1){
+category1<-as.factor(category1)
+t<-table(category1)
+p<-prop.table(t)*100
+cbind(sort(t),sort(p),2)
+}
+CountPerc(MERSQI$Domain)
+(summary(CountPerc(MERSQI$Domain)))
+```
+
+Exploratory analysis      
+```{r}
+head(MERSQI,3)
+dim(MERSQI)
+str(MERSQI)
+unique(MERSQI)
+
+#STats
+mean(sort(MERSQI$`Item possible score`))
+mean(sort(MERSQI$`Percentage (%)`))
+mean(sort(MERSQI$`Studies no.`))
+median(sort(MERSQI$`Item possible score`))
+median(sort(MERSQI$`Percentage (%)`))
+median(sort(MERSQI$`Studies no.`))
+mean((MERSQI$`Item possible score`)*((MERSQI$`Studies no.`)))
+
+sd(MERSQI$`Item possible score`)
+#Regression analysis
+fit_M <- lm(MERSQI$`Studies no.` ~ factor(MERSQI$`Percentage (%)`), data=MERSQI)
+summary(fit_M)
+#Other factors influence
+fit_M2 <- lm(MERSQI$`Studies no.` ~ . ,data=MERSQI)
+summary(fit_M2)
+#R 2 low!
+
+
+
+```
+      
+```{r}
+#Visualization MERSQI
+plot1 <- function() {
+        hist(MERSQI$`Studies no.`, main = paste("MERSQI Studies no."), col="red", xlab="Studies no.")
+        dev.copy(png, file="plot1.png", width=480, height=480)
+        dev.off()
+        cat("MERSQI.png has been saved in", getwd())
+}
+plot1()
+hist(MERSQI$`Studies no.`, main = paste("MERSQI Studies no."), col="red", xlab="Studies no.")
+
+Two_category_boxplot<-function(category1,category2,dataframe){
+  category1<- as.factor(category1)
+  category2 <- as.factor(category2)
+
+boxplot(category1 ~ category2, 
+        data = dataframe, 
+        ylab = "", 
+        xlab = "",
+        col = (c("pink","blue")))
+dev.copy(png, file="plot1.png", width=480, height=480)
+        dev.off()
+        cat("MERSQI.png has been saved in", getwd())
+}
+ggplot(MERSQI, aes(MERSQI$Domain,MERSQI$`Item possible score`))+geom_boxplot(aes(fill=MERSQI$Domain))+scale_x_discrete(breaks=levels(MERSQI$Domain))
+ggplot(MERSQI, aes(MERSQI$Domain,MERSQI$`Studies no.`))+geom_boxplot(aes(fill=MERSQI$Domain))+scale_x_discrete(breaks=levels(MERSQI$Domain))
+ggplot(MERSQI, aes(MERSQI$Domain,MERSQI$`Studies no.`))+geom_boxplot(aes(fill=MERSQI$Domain))+scale_x_discrete(breaks=levels(MERSQI$Domain))
+
+ggplot(MERSQI, aes(MERSQI$`Item possible score`,MERSQI$`Studies no.`))+ geom_jitter(aes(color=Domain))+scale_x_discrete(breaks=levels(MERSQI$Domain))
+
+```
+Results: The majority were of moderate quality with a mean MERSQI score=12.67 (SD  0.9153932, range 6.0–13.5). correlation coefficient was 0.79 (95% confidence interval 0.75–0.88).
+
+
+mean((MERSQI$`Item possible score`)*((MERSQI$`Studies no.`)))
+12.67
+mean(sort(MERSQI$`Item possible score`))
+[1] 1.26087
+> mean(sort(MERSQI$`Percentage (%)`))
+[1] 39.11
+> mean(sort(MERSQI$`Studies no.`))
+[1] 11.73913
+> median(sort(MERSQI$`Item possible score`))
+[1] 1
+> median(sort(MERSQI$`Percentage (%)`))
+[1] 40
+> median(sort(MERSQI$`Studies no.`))
+[1] 12
+sd(MERSQI$`Item possible score`
+
+There was no relation between parameters: MERSQI$`Percentage and MERSQI$`Studies no
+
+
+Conclusion:
+The MERSQI scores for the 30 studies by item and domain. The total mean of MERSQI score was 10.26 (SD=2.14, range 6.0–13.5). The study with the highest MERSQI score was a randomized controlled study showing that three-dimensional presentations improve in the identification of surgical liver anatomy. This study earned the highest score because it was a randomized controlled study, had a higher number of participants (>75), used objective measures, that were appropriate for study design and the type of data and the data analysis was beyond descriptive analysis. However, the outcomes of the study were at the level of knowledge and skills obtained and did not explore higher levels of outcomes outlined by MERSQ instrument.
+
+
+
+
+      MEDICAL COLLEGES AND 3D MEDICAL EDUCATION 
+  Data was gathered by searching NSF database for medical college statistics and searching the internet for college medical 3D education or research. Some data was taken from university sites and articles. Data includes : total medical R & D expenditure, Medical School, and the number of students who used the technology among others.
+  
+```{r}
+
+# Investigate the distribution of 3d tech and R &D expenditure
+summary(X3D_Med)
+
+CountPerc<-function(category1){
+category1<-as.factor(category1)
+t<-table(category1)
+p<-prop.table(t)*100
+cbind(sort(t),sort(p),2)
+}
+CountPerc(X3D_Med$`College Name`)
+(summary(X3D_Med$`College Name`))
+
+lm1<-lm (X3D_Med$`Total R&D`~ X3D_Med$`Private or Public Institution`)
+summary(lm1)
+
+#3d tech and R &D expenditure by college
+
+```
+  
+
+     
+GENERAL EXPOSURE TO 3D TECHNOLOGY                                
+  General exposure to 3D Technology was gather by using a  survey via google forums. It was administered to a class of students in a graduate Computer Science program. The survey was  issued via a google forms to identify general exposure to 3D education.  The participants represent a from a diverse background. Information gathered from participants included the region of high school, undergraduate institution and  3D technology of exposure , sentiments and among other entries. 
+  
+#Now investigate the distribution of 3d exposure values and and Graduation date (by decades) 
+```{r}
+CountPerc(Class_Survey$`Decade of High school Graduation`)
+CountPerc(Class_Survey$`Decade of Undergraduate Graduation`)
+# Investigate the distribution of 3d exposure by decades
+
+
+```
+```{r}
+#participant info
+ggplot(Class_Survey, aes(group=Class_Survey$`Decade of High school Graduation`, x=Class_Survey$`Region of High School`)) +geom_bar(aes(fill=Class_Survey$`Decade of High school Graduation`))+scale_x_discrete(breaks=levels(Class_Survey$`Region of High School`))+ggtitle("Participant count by H.S. Region and Gradutaion Decade")
+# Select movies from top 10 most common genres and plot their relative proportions
+Class_Survey[, 'Percent'] = 100.0/nrow(Class_Survey)
+Class_Survey_3D_TYPE = melt(data.frame(t(colSums(Class_Survey[,])/ nrow(Class_Survey) * 100)), id.vars=NULL)
+df_genres = df_genres[with(df_genres, order(-value)), ]
+ggplot(df_genres[1:10, ], aes(x=reorder(variable, -value), y=value)) +
+ geom_bar(stat="identity") +
+ xlab("Top 10 Genres") +
+ ylab("Percent of Movies") 
+
+
+```
+
+
+ IMPACT OF USING 3D ANATOMICAL REPRESENTATIONS IN MEDICAL EDUCATION
+    The participants were from Medicine, Kinesiology, allied health schools: Health Sciences,Massage therapy,Occupational therapy, Physiotherapy,Psychology, and Social science, Some studies had participants from 2 or more institutes, or from several schools. The dataset reflect to record  Major features, year of study, type of study, 3D  tools used, institution of study,author,outcome of study and learning knowledge.
+
+
+
+
+```{r}
+
+
+
+
+
+
+summary(Impact3D)
+ ggplot(Impact3D, aes(x=Impact3D$`Type of study`, y=Impact3D$`Number of Participants`, fill=Impact3D$`What was carried out/measured`)) +
+ # geom_violin(na.rm=TRUE, alpha=0.5, fill="cornsilk", color="gray60") +
+ geom_point(na.rm=TRUE) +
+ guides(fill=FALSE) +
+ coord_flip()
+ 
+ 
+ 
+ 
+ ggplot(Impact3D, aes(x=Impact3D$`Type of study`, y=Impact3D$`Number of Groups per study`, fill=Impact3D$`What was carried out/measured`)) +
+geom_boxplot(na.rm=TRUE, alpha=0.5, fill="cornsilk", color="gray60")  +
+ guides(fill=FALSE) +
+ coord_flip()
+ 
+  ggplot(Impact3D, aes(x=Impact3D$`Type of study`, y=Impact3D$`Number of Groups per study`, fill=Impact3D$`What was carried out/measured`)) +
+geom_violin(na.rm=TRUE, alpha=0.5, fill="cornsilk", color="gray60") +
+ geom_point(na.rm=TRUE) +
+ guides(fill=FALSE) 
+ 
+ 
+``` 
+
+DATA ANALYTICS WITH R 
+  All Datasets were processed, analyzed and visualized using R programming language. R is an powerful statistical tool used commonly for computing and data analysis. The analyses provided are done via R Markdown to prepare a quick reproducible report with clear visualizations of the data. Copies of the datasets .csv files,reports, R markdown file and any other associated materials will be available on the repository site Github.
+
+
+WORKING WITH CATEGORICAL DATA
+In understanding for categorical data its important to include: Frequencies: The number of observations for a particular category.Proportions: The percent that each category accounts for out of the whole Marginals: The totals in a cross tabulation by row or column. Visualization: We should understand these features of the data through statistics and visualization
+
+# Methods 
+
+We conduct a thorough statistical analysis, begining with pretesting for stationarity and cointegration; then we proceed to fitting an econometric model of the price relationships. 
+
+
+# Results
+
+
+
+
+
+
+
+
+# References 
